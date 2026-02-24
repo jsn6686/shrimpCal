@@ -342,6 +342,182 @@
     color:var(--accent2); white-space:nowrap; letter-spacing:0.03em;
   }
 
+  /* ════════════════════════════════════
+     PRINT STYLES — looks like the reference chart
+  ════════════════════════════════════ */
+  @media print {
+    /* Reset everything to white page */
+    *, *::before, *::after { box-sizing: border-box; }
+    html, body {
+      background: #fff !important;
+      color: #000 !important;
+      font-family: Arial, sans-serif !important;
+      margin: 0; padding: 0;
+    }
+    body::before, body::after { display: none !important; }
+
+    /* Hide all screens except the feed chart screen */
+    .screen { display: none !important; }
+    #screen3 { display: block !important; padding: 0 !important; min-height: unset !important; }
+
+    /* Hide navigation, setup, buttons, stats, legend, action-row */
+    .topbar, .back-btn, .setup-block, .gen-btn,
+    .stats-row, .legend, .action-row,
+    .fc-subtitle { display: none !important; }
+
+    /* Page title area */
+    .fc-header { margin-bottom: 10px !important; }
+    .fc-title {
+      font-family: Arial, sans-serif !important;
+      font-size: 16pt !important;
+      font-weight: bold !important;
+      color: #000 !important;
+      text-shadow: none !important;
+      letter-spacing: 0.05em !important;
+      text-align: center !important;
+    }
+
+    /* PL count banner */
+    .results-header {
+      border: 1.5px solid #000 !important;
+      padding: 6px 12px !important;
+      margin-bottom: 10px !important;
+      display: flex !important;
+      justify-content: space-between !important;
+      align-items: center !important;
+      background: #fff !important;
+    }
+    /* Show "No of Post Larvae" as label using CSS */
+    .results-label {
+      display: block !important;
+      font-family: Arial, sans-serif !important;
+      font-size: 12pt !important;
+      font-weight: bold !important;
+      color: #000 !important;
+      letter-spacing: 0 !important;
+      text-transform: none !important;
+      margin-bottom: 0 !important;
+    }
+    .results-label::before { content: "No of Post Larvae"; }
+    /* Hide the species name */
+    .results-title { display: none !important; }
+    .results-meta {
+      background: none !important;
+      border: none !important;
+      font-size: 12pt !important;
+      font-weight: bold !important;
+      color: #000 !important;
+      letter-spacing: 0 !important;
+      padding: 0 !important;
+    }
+
+    /* Card: remove styling */
+    .card {
+      background: #fff !important;
+      border: none !important;
+      border-radius: 0 !important;
+      padding: 20px !important;
+      box-shadow: none !important;
+      max-width: 100% !important;
+      opacity: 1 !important;
+      animation: none !important;
+    }
+
+    /* Results: always visible */
+    .results {
+      display: block !important;
+      opacity: 1 !important;
+      transform: none !important;
+    }
+
+    /* Table wrapper */
+    .table-wrap {
+      background: #fff !important;
+      border: 1.5px solid #000 !important;
+      border-radius: 0 !important;
+      overflow: visible !important;
+    }
+
+    /* Table */
+    table {
+      width: 100% !important;
+      border-collapse: collapse !important;
+      font-size: 11pt !important;
+      font-family: Arial, sans-serif !important;
+      min-width: unset !important;
+    }
+    thead tr {
+      background: #fff !important;
+      border-bottom: 1.5px solid #000 !important;
+    }
+    thead th {
+      font-family: Arial, sans-serif !important;
+      font-size: 11pt !important;
+      font-weight: bold !important;
+      text-transform: uppercase !important;
+      color: #000 !important;
+      letter-spacing: 0 !important;
+      padding: 8px 12px !important;
+      text-align: center !important;
+      border-right: 1px solid #ccc !important;
+    }
+    thead th:first-child { text-align: center !important; }
+    thead th:last-child { border-right: none !important; }
+
+    tbody tr {
+      border-top: 1px solid #ccc !important;
+      background: #fff !important;
+    }
+    tbody tr:nth-child(even) { background: #f9f9f9 !important; }
+    td {
+      padding: 7px 12px !important;
+      color: #000 !important;
+      font-size: 11pt !important;
+      font-family: Arial, sans-serif !important;
+      text-align: center !important;
+      border-right: 1px solid #ccc !important;
+    }
+    td:first-child {
+      font-weight: bold !important;
+      font-size: 11pt !important;
+      color: #000 !important;
+      border-left: none !important;
+      text-align: center !important;
+      width: 60px !important;
+      border-right: 1px solid #ccc !important;
+    }
+    td:last-child { border-right: none !important; }
+
+    /* Phase colors — remove on print */
+    .phase-1 td:first-child,
+    .phase-2 td:first-child,
+    .phase-3 td:first-child {
+      color: #000 !important;
+      border-left: none !important;
+    }
+
+    td.feed-day { color: #000 !important; font-weight: bold !important; }
+    td.cumul    { color: #000 !important; font-size: 11pt !important; }
+
+    /* Feed code tags */
+    .feed-code { display: inline !important; }
+    .code-tag {
+      background: none !important;
+      border: none !important;
+      color: #000 !important;
+      font-size: 11pt !important;
+      font-family: Arial, sans-serif !important;
+      font-weight: normal !important;
+      padding: 0 !important;
+      letter-spacing: 0 !important;
+    }
+
+    /* Page break settings */
+    @page { margin: 15mm; size: A4 portrait; }
+    table { page-break-inside: auto; }
+    tr { page-break-inside: avoid; }
+  }
+
   /* Export bar */
   .action-row { display:flex; gap:12px; flex-wrap:wrap; }
   .export-btn {
@@ -439,10 +615,6 @@
      PAGE 2 — Tool Selection
 ══════════════════════════════ -->
 <div id="screen2" class="screen active">
-  <div class="topbar">
-    <button class="topbar-btn ghost">Login</button>
-    <button class="topbar-btn primary">Sign Up</button>
-  </div>
   <div class="logo-wrap">
     <div class="logo-icon">🦐</div>
     <div class="logo-title">Shrimp Cal</div>
@@ -465,10 +637,6 @@
      PAGE 3 — Feed Chart
 ══════════════════════════════ -->
 <div id="screen3" class="screen">
-  <div class="topbar">
-    <button class="topbar-btn ghost">Login</button>
-    <button class="topbar-btn primary">Sign Up</button>
-  </div>
 
   <div class="logo-wrap" style="margin-bottom:18px;">
     <div class="logo-icon">🦐</div>
@@ -565,15 +733,7 @@
       <div class="action-row">
         <button class="export-btn primary" onclick="exportPDF()">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
-          Export PDF
-        </button>
-        <button class="export-btn secondary" onclick="exportCSV()">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7,10 12,15 17,10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          Export CSV
-        </button>
-        <button class="export-btn secondary" onclick="window.print()">
-          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><polyline points="6,9 6,2 18,2 18,9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
-          Print
+          Download Print Page
         </button>
       </div>
 
@@ -585,10 +745,6 @@
      PAGE 4 — Survival Calculator
 ══════════════════════════════ -->
 <div id="screen4" class="screen">
-  <div class="topbar">
-    <button class="topbar-btn ghost">Login</button>
-    <button class="topbar-btn primary">Sign Up</button>
-  </div>
 
   <div class="logo-wrap" style="margin-bottom:18px;">
     <div class="logo-icon">🦐</div>
@@ -708,11 +864,11 @@
   const VANNAMEI_BASE = [
     [1,2.0,"No 01"],[2,2.3,"No 01"],[3,2.6,"No 01"],[4,2.9,"No 01"],[5,3.2,"No 01"],
     [6,3.6,"No 01"],[7,4.0,"No 01"],[8,4.4,"No 01"],[9,4.8,"No 01"],[10,5.2,"No 01"],
-    [11,5.7,"No 01+No 2"],[12,6.2,"No 01+No 2"],[13,6.7,"No 01+No 2"],[14,7.2,"No 01+No 2"],
-    [15,7.7,"No 01+No 2"],[16,8.3,"No 01+No 2"],[17,8.9,"No 01+No 2"],[18,9.5,"No 01+No 2"],
-    [19,10.1,"No 01+No 2"],[20,10.7,"No 01+No 2"],[21,11.4,"No 2"],[22,12.1,"No 2"],
-    [23,12.8,"No 2"],[24,13.5,"No 2"],[25,14.2,"No 2"],[26,15.0,"No 2"],
-    [27,15.8,"No 2"],[28,16.6,"No 2"],[29,17.4,"No 2"],[30,18.2,"No 2"]
+    [11,5.7,"No 01+No 1s"],[12,6.2,"No 01+No 1s"],[13,6.7,"No 01+No 1s"],[14,7.2,"No 01+No 1s"],
+    [15,7.7,"No 01+No 1s"],[16,8.3,"No 01+No 1s"],[17,8.9,"No 01+No 1s"],[18,9.5,"No 01+No 1s"],
+    [19,10.1,"No 01+No 1s"],[20,10.7,"No 01+No 1s"],[21,11.4,"No 1s"],[22,12.1,"No 1s"],
+    [23,12.8,"No 1s"],[24,13.5,"No 1s"],[25,14.2,"No 1s"],[26,15.0,"No 1s"],
+    [27,15.8,"No 1s"],[28,16.6,"No 1s"],[29,17.4,"No 1s"],[30,18.2,"No 1s"]
   ];
 
   let selectedSpecies = 'monodon';
@@ -857,7 +1013,72 @@
     a.click();
   }
 
-  function exportPDF() { window.print(); }
+  function exportPDF() {
+    const pl       = document.getElementById('plCount').value;
+    const ratio    = parseFloat(pl) / 100000;
+    const BASE     = selectedSpecies === 'monodon' ? MONODON_BASE : VANNAMEI_BASE;
+    const specName = selectedSpecies === 'monodon'
+      ? 'BLACK TIGER SHRIMP (MONODON) FEED CHART'
+      : 'VANNAMEI FEED CHART';
+
+    let rows = '';
+    let cum  = 0;
+    BASE.forEach(function(entry) {
+      const doc = entry[0], feedBase = entry[1], code = entry[2];
+      const feed = +(feedBase * ratio).toFixed(2);
+      cum = +(cum + feed).toFixed(2);
+      const codeDisplay = code.replace(/\+/g, ' + ');
+      rows += '<tr>' +
+        '<td>' + doc + '</td>' +
+        '<td>' + codeDisplay + '</td>' +
+        '<td>' + feed.toFixed(2) + '</td>' +
+        '<td>' + cum.toFixed(2) + '</td>' +
+        '</tr>';
+    });
+
+    const html = '<!DOCTYPE html>\n' +
+'<html>\n<head>\n<meta charset="UTF-8">\n' +
+'<title>' + specName + '</title>\n' +
+'<style>\n' +
+'  * { box-sizing: border-box; margin: 0; padding: 0; }\n' +
+'  body { font-family: Arial, sans-serif; font-size: 11pt; color: #000; background: #fff; padding: 20mm 15mm; }\n' +
+'  h1 { text-align: center; font-size: 14pt; font-weight: bold; letter-spacing: 0.08em; margin-bottom: 14px; }\n' +
+'  .pl-banner { display: flex; justify-content: space-between; align-items: center; border: 1.5px solid #000; padding: 7px 14px; margin-bottom: 14px; font-size: 12pt; font-weight: bold; }\n' +
+'  table { width: 100%; border-collapse: collapse; font-size: 11pt; }\n' +
+'  thead tr { border-top: 1.5px solid #000; border-bottom: 1.5px solid #000; }\n' +
+'  thead th { padding: 8px 12px; font-weight: bold; text-align: center; font-size: 11pt; border-right: 1px solid #bbb; }\n' +
+'  thead th:last-child { border-right: none; }\n' +
+'  tbody tr { border-bottom: 1px solid #ccc; }\n' +
+'  tbody tr:last-child { border-bottom: 1.5px solid #000; }\n' +
+'  tbody tr:nth-child(even) { background: #f5f5f5; }\n' +
+'  td { padding: 7px 12px; text-align: center; border-right: 1px solid #ccc; }\n' +
+'  td:first-child { font-weight: bold; }\n' +
+'  td:last-child { border-right: none; }\n' +
+'  .no-print { text-align: center; margin-bottom: 16px; }\n' +
+'  .no-print button { padding: 10px 32px; background: #1a73e8; color: #fff; border: none; border-radius: 6px; font-size: 13pt; font-weight: bold; cursor: pointer; }\n' +
+'  .no-print button:hover { background: #1558b0; }\n' +
+'  .footer { margin-top: 24px; text-align: center; font-size: 9pt; color: #888; letter-spacing: 0.05em; }\n' +
+'  @media print { .no-print { display: none; } body { padding: 10mm; } @page { size: A4 portrait; margin: 15mm; } }\n' +
+'<\/style>\n<\/head>\n<body>\n' +
+'  <div class="no-print"><button onclick="window.print()">&#128438; Print / Save as PDF</button></div>\n' +
+'  <h1>' + specName + '</h1>\n' +
+'  <div class="pl-banner"><span>No of Post Larvae</span><span>' + parseFloat(pl).toLocaleString() + '</span></div>\n' +
+'  <table>\n' +
+'    <thead><tr><th>DOC</th><th>FEED CODE</th><th>FEED/DAY<br>(Kg)</th><th>TOTAL /<br>CUMULATIVE FEED</th></tr></thead>\n' +
+'    <tbody>' + rows + '</tbody>\n' +
+'  </table>\n' +
+'  <div class="footer">Generated by <strong>ShrimpCal</strong></div>\n' +
+'<\/body>\n<\/html>';
+
+    const blob = new Blob([html], { type: 'text/html' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `feed-chart-${selectedSpecies}-${pl}PL.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(a.href);
+  }
 
   /* Keyboard */
   document.querySelectorAll('.species-btn').forEach(btn => {
