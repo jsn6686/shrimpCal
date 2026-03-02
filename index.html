@@ -700,18 +700,6 @@
     <!-- Step 02 — PL Count -->
     <div class="setup-block">
       <p class="section-label">02 — Enter Post Larvae Count</p>
-      <div class="input-row">
-        <div class="input-group">
-          <label for="plCount">Number of Post Larvae (PL)</label>
-          <input
-            type="number" id="plCount" class="pl-input"
-            placeholder="e.g. 250000" min="1" step="1000"
-            onkeydown="if(event.key==='Enter') generateChart()"
-            oninput="this.classList.remove('error')"
-          />
-        </div>
-        <button class="gen-btn" onclick="generateChart()">Generate Chart →</button>
-      </div>
       <!-- Feed % Slider -->
       <div class="slider-block">
         <div class="slider-header">
@@ -727,6 +715,19 @@
           <span class="slider-tick">100%</span>
         </div>
       </div>
+      <div class="input-row" style="margin-top:16px;">
+        <div class="input-group">
+          <label for="plCount">Number of Post Larvae (PL)</label>
+          <input
+            type="number" id="plCount" class="pl-input"
+            placeholder="e.g. 250000" min="1" step="1000"
+            onkeydown="if(event.key==='Enter') generateChart()"
+            oninput="this.classList.remove('error')"
+          />
+        </div>
+        <button class="gen-btn" onclick="generateChart()">Generate Chart →</button>
+      </div>
+    </div><!-- /setup-block -->
 
     <!-- Results -->
     <div class="results" id="results">
@@ -921,40 +922,42 @@
      NAVIGATION
   ════════════════════════════ */
   function navigate(to, from) {
-    const fromEl = document.getElementById('screen' + from);
-    const toEl   = document.getElementById('screen' + to);
-    const anim   = to < from ? 'slide-back' : 'slide-in';
-    fromEl.classList.remove('active');
-    toEl.classList.add('active', anim);
-    toEl.addEventListener('animationend', () => toEl.classList.remove(anim), { once: true });
+    try {
+      var fromEl = document.getElementById('screen' + from);
+      var toEl   = document.getElementById('screen' + to);
+      if (!fromEl || !toEl) { console.error('Screen not found', to, from); return; }
+      var anim = to < from ? 'slide-back' : 'slide-in';
+      fromEl.classList.remove('active');
+      toEl.classList.add('active', anim);
+      toEl.addEventListener('animationend', function() { toEl.classList.remove(anim); }, { once: true });
+      window.scrollTo(0, 0);
+    } catch(e) { console.error('navigate error:', e); }
   }
 
   function goToTool(tool) {
     if (tool === 'feed-chart') {
-      // Reset chart page
-      const res = document.getElementById('results');
-      res.classList.remove('visible');
-      res.style.display = 'none';
-      document.getElementById('plCount').value = '';
-      document.getElementById('plCount').classList.remove('error');
-      // Reset species to monodon
-      selectSpecies('monodon', document.getElementById('btn_monodon'));
-      // Reset slider
-      document.getElementById('feedSlider').value = 100;
-      onSliderChange(100);
+      try {
+        var res = document.getElementById('results');
+        if (res) { res.classList.remove('visible'); res.style.display = 'none'; }
+        var plInput = document.getElementById('plCount');
+        if (plInput) { plInput.value = ''; plInput.classList.remove('error'); }
+        var btnMonodon = document.getElementById('btn_monodon');
+        if (btnMonodon) selectSpecies('monodon', btnMonodon);
+        var slider = document.getElementById('feedSlider');
+        if (slider) { slider.value = 100; onSliderChange(100); }
+      } catch(e) { console.error('Feed chart reset error:', e); }
       navigate(3, 2);
     } else if (tool === 'survival-calculator') {
-      // Reset survival page
-      const scRes = document.getElementById('sc_results');
-      scRes.classList.remove('visible');
-      scRes.style.display = 'none';
-      // Reset inputs
-      ['sc_v_abw','sc_v_dailyFeed','sc_v_stocked','sc_m_abw','sc_m_feed','sc_m_stocking'].forEach(id => {
-        const el = document.getElementById(id);
-        if (el) { el.value = ''; el.classList.remove('error'); }
-      });
-      // Reset species to monodon
-      selectSurvivalSpecies('monodon', document.getElementById('sc_btn_monodon'));
+      try {
+        var scRes = document.getElementById('sc_results');
+        if (scRes) { scRes.classList.remove('visible'); scRes.style.display = 'none'; }
+        ['sc_v_abw','sc_v_dailyFeed','sc_v_stocked','sc_m_abw','sc_m_feed','sc_m_stocking'].forEach(function(id) {
+          var el = document.getElementById(id);
+          if (el) { el.value = ''; el.classList.remove('error'); }
+        });
+        var scBtnMonodon = document.getElementById('sc_btn_monodon');
+        if (scBtnMonodon) selectSurvivalSpecies('monodon', scBtnMonodon);
+      } catch(e) { console.error('SC reset error:', e); }
       navigate(4, 2);
     }
   }
