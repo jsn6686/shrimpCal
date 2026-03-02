@@ -820,7 +820,7 @@
     </div>
 
     <!-- Step 02 — Inputs (Vannamei) -->
-    <div class="setup-block" id="sc_inputs_vannamei">
+    <div class="setup-block" id="sc_inputs_vannamei" style="display:none;">
       <p class="section-label">02 — Enter Values</p>
       <div class="input-row" style="flex-direction:column; gap:16px;">
         <div class="input-group">
@@ -840,7 +840,7 @@
     </div>
 
     <!-- Step 02 — Inputs (Monodon) -->
-    <div class="setup-block" id="sc_inputs_monodon" style="display:none;">
+    <div class="setup-block" id="sc_inputs_monodon">
       <p class="section-label">02 — Enter Values</p>
       <div class="input-row" style="flex-direction:column; gap:16px;">
         <div class="input-group">
@@ -964,7 +964,7 @@
   ════════════════════════════ */
   function selectSpecies(sp, btn) {
     selectedSpecies = sp;
-    document.querySelectorAll('.species-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('#screen3 .species-btn').forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
     // Re-generate if a PL count already entered
     if (document.getElementById('plCount').value) generateChart();
@@ -1146,66 +1146,91 @@
   }
 
   /* Keyboard */
-  document.querySelectorAll('.species-btn').forEach(btn => {
+  document.querySelectorAll('#screen3 .species-btn').forEach(btn => {
     btn.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') btn.click(); });
   });
 
   /* ════════════════════════════
      SURVIVAL CALCULATOR
   ════════════════════════════ */
-  let selectedSurvivalSpecies = 'monodon';
+  var selectedSurvivalSpecies = 'monodon';
 
   function selectSurvivalSpecies(sp, btn) {
     selectedSurvivalSpecies = sp;
-    document.querySelectorAll('#screen4 .species-btn').forEach(b => b.classList.remove('active'));
+
+    // Scope strictly to screen4 species buttons only
+    var screen4 = document.getElementById('screen4');
+    var btns = screen4.querySelectorAll('.species-btn');
+    btns.forEach(function(b) { b.classList.remove('active'); });
     btn.classList.add('active');
-    // Show/hide correct input panels
-    document.getElementById('sc_inputs_vannamei').style.display = sp === 'vannamei' ? 'block' : 'none';
-    document.getElementById('sc_inputs_monodon').style.display  = sp === 'monodon'  ? 'block' : 'none';
-    // Hide results when switching species
-    const scRes = document.getElementById('sc_results');
+
+    // Show/hide input panels
+    var vPanel = document.getElementById('sc_inputs_vannamei');
+    var mPanel = document.getElementById('sc_inputs_monodon');
+    if (sp === 'vannamei') {
+      vPanel.style.display = 'block';
+      mPanel.style.display = 'none';
+    } else {
+      vPanel.style.display = 'none';
+      mPanel.style.display = 'block';
+    }
+
+    // Clear all inputs
+    ['sc_v_abw','sc_v_dailyFeed','sc_v_stocked','sc_m_abw','sc_m_feed','sc_m_stocking'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) { el.value = ''; el.classList.remove('error'); }
+    });
+
+    // Hide results
+    var scRes = document.getElementById('sc_results');
     scRes.classList.remove('visible');
     scRes.style.display = 'none';
   }
 
   // Vannamei feed table: weight(g) → feed%
   function getVannameiFeedPercentage(weight) {
-    const feedTable = {
-      3:5.25,4:5,5:4.75,6:4.5,7:4.25,8:4,9:3.9,10:3.8,
-      11:3.7,12:3.6,13:3.5,14:3.4,15:3.3,16:3.2,17:3.1,
-      18:3.0,19:2.9,20:2.8,21:2.7,22:2.6,23:2.5,24:2.4,
-      25:2.3,26:2.2,27:2.1,28:2.0,29:1.9,30:1.8
+    var feedTable = {
+      3:5.25, 4:5, 5:4.75, 6:4.5, 7:4.25, 8:4, 9:3.9, 10:3.8,
+      11:3.7, 12:3.6, 13:3.5, 14:3.4, 15:3.3, 16:3.2, 17:3.1,
+      18:3.0, 19:2.9, 20:2.8, 21:2.7, 22:2.6, 23:2.5, 24:2.4,
+      25:2.3, 26:2.2, 27:2.1, 28:2.0, 29:1.9, 30:1.8
     };
     return feedTable[Math.round(weight)];
   }
 
-  // Monodon feeding rate: interpolated 3.1% @ 10g → 1.4% @ 40g
+  // Monodon feeding rate: 3.1% @ ≤10g → 1.4% @ ≥40g
   function getMonodonFeedingRate(weight) {
-    const minW = 10, maxW = 40, startRate = 3.1, endRate = 1.4;
+    var minW = 10, maxW = 40, startRate = 3.1, endRate = 1.4;
     if (weight <= minW) return startRate;
     if (weight >= maxW) return endRate;
     return startRate - ((startRate - endRate) / (maxW - minW)) * (weight - minW);
   }
 
   function calculateSurvival() {
-    const scRes = document.getElementById('sc_results');
+    var scRes = document.getElementById('sc_results');
 
     if (selectedSurvivalSpecies === 'vannamei') {
-      const abw       = parseFloat(document.getElementById('sc_v_abw').value);
-      const dailyFeed = parseFloat(document.getElementById('sc_v_dailyFeed').value);
-      const stocked   = parseFloat(document.getElementById('sc_v_stocked').value);
+      var abw       = parseFloat(document.getElementById('sc_v_abw').value);
+      var dailyFeed = parseFloat(document.getElementById('sc_v_dailyFeed').value);
+      var stocked   = parseFloat(document.getElementById('sc_v_stocked').value);
 
-      // Validate
-      let valid = true;
-      if (isNaN(abw) || abw < 3 || abw > 30) { document.getElementById('sc_v_abw').classList.add('error'); valid = false; }
-      if (isNaN(dailyFeed) || dailyFeed <= 0)  { document.getElementById('sc_v_dailyFeed').classList.add('error'); valid = false; }
-      if (isNaN(stocked)   || stocked < 1)      { document.getElementById('sc_v_stocked').classList.add('error'); valid = false; }
+      var valid = true;
+      if (isNaN(abw) || abw < 3 || abw > 30) {
+        document.getElementById('sc_v_abw').classList.add('error'); valid = false;
+      }
+      if (isNaN(dailyFeed) || dailyFeed <= 0) {
+        document.getElementById('sc_v_dailyFeed').classList.add('error'); valid = false;
+      }
+      if (isNaN(stocked) || stocked < 1) {
+        document.getElementById('sc_v_stocked').classList.add('error'); valid = false;
+      }
       if (!valid) return;
 
-      const feedPercent = getVannameiFeedPercentage(abw);
-      const biomass     = dailyFeed / (feedPercent / 100);
-      const shrimpAlive = (biomass * 1000) / abw;
-      const survival    = (shrimpAlive / stocked) * 100;
+      var feedPercent = getVannameiFeedPercentage(abw);
+      if (!feedPercent) { alert('ABW out of table range (3–30g)'); return; }
+      var biomass     = dailyFeed / (feedPercent / 100);
+      var shrimpAlive = (biomass * 1000) / abw;
+      var survival    = (shrimpAlive / stocked) * 100;
 
       document.getElementById('sc_resultsTitle').textContent = 'Whiteleg Shrimp (Vannamei)';
       document.getElementById('sc_resultsMeta').textContent  = 'ABW: ' + abw + 'g';
@@ -1215,34 +1240,42 @@
       document.getElementById('sc_survival').textContent     = survival.toFixed(2) + '%';
 
     } else {
-      const abw      = parseFloat(document.getElementById('sc_m_abw').value);
-      const feed     = parseFloat(document.getElementById('sc_m_feed').value);
-      const stocking = parseFloat(document.getElementById('sc_m_stocking').value);
+      var abw2      = parseFloat(document.getElementById('sc_m_abw').value);
+      var feed2     = parseFloat(document.getElementById('sc_m_feed').value);
+      var stocking2 = parseFloat(document.getElementById('sc_m_stocking').value);
 
-      let valid = true;
-      if (isNaN(abw)      || abw <= 0)      { document.getElementById('sc_m_abw').classList.add('error'); valid = false; }
-      if (isNaN(feed)     || feed <= 0)      { document.getElementById('sc_m_feed').classList.add('error'); valid = false; }
-      if (isNaN(stocking) || stocking < 1)   { document.getElementById('sc_m_stocking').classList.add('error'); valid = false; }
-      if (!valid) return;
+      var valid2 = true;
+      if (isNaN(abw2) || abw2 <= 0) {
+        document.getElementById('sc_m_abw').classList.add('error'); valid2 = false;
+      }
+      if (isNaN(feed2) || feed2 <= 0) {
+        document.getElementById('sc_m_feed').classList.add('error'); valid2 = false;
+      }
+      if (isNaN(stocking2) || stocking2 < 1) {
+        document.getElementById('sc_m_stocking').classList.add('error'); valid2 = false;
+      }
+      if (!valid2) return;
 
-      const feedingRate = getMonodonFeedingRate(abw);
-      const biomass     = feed / (feedingRate / 100);
-      const shrimpCount = biomass / (abw / 1000);
-      const survival    = (shrimpCount / stocking) * 100;
+      var feedingRate = getMonodonFeedingRate(abw2);
+      var biomass2    = feed2 / (feedingRate / 100);
+      var shrimpCount = biomass2 / (abw2 / 1000);
+      var survival2   = (shrimpCount / stocking2) * 100;
 
       document.getElementById('sc_resultsTitle').textContent = 'Black Tiger Shrimp (Monodon)';
-      document.getElementById('sc_resultsMeta').textContent  = 'ABW: ' + abw + 'g';
+      document.getElementById('sc_resultsMeta').textContent  = 'ABW: ' + abw2 + 'g';
       document.getElementById('sc_feedRate').textContent     = feedingRate.toFixed(2) + '%';
-      document.getElementById('sc_biomass').textContent      = biomass.toFixed(2);
+      document.getElementById('sc_biomass').textContent      = biomass2.toFixed(2);
       document.getElementById('sc_shrimpCount').textContent  = Math.round(shrimpCount).toLocaleString();
-      document.getElementById('sc_survival').textContent     = survival.toFixed(2) + '%';
+      document.getElementById('sc_survival').textContent     = survival2.toFixed(2) + '%';
     }
 
     scRes.style.display = 'block';
-    requestAnimationFrame(() => requestAnimationFrame(() => {
-      scRes.classList.add('visible');
-      scRes.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }));
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        scRes.classList.add('visible');
+        scRes.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
   }
 </script>
 </body>
