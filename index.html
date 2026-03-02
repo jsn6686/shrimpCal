@@ -585,7 +585,7 @@
   }
   .sc-results.visible { display:block; opacity:1; transform:translateY(0); }
 
-  .sc-stats-row { display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-top:8px; }
+  .sc-stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:8px; }
   .sc-stat-card {
     background:rgba(10,22,40,0.5); border:1px solid var(--border);
     border-radius:12px; padding:18px 14px; text-align:center;
@@ -870,10 +870,6 @@
         <span class="results-meta" id="sc_resultsMeta">—</span>
       </div>
       <div class="sc-stats-row">
-        <div class="sc-stat-card">
-          <span class="sc-stat-value" id="sc_feedRate">—</span>
-          <span class="sc-stat-label">Auto Feed Rate (%)</span>
-        </div>
         <div class="sc-stat-card">
           <span class="sc-stat-value" id="sc_biomass">—</span>
           <span class="sc-stat-label">Estimated Biomass (kg)</span>
@@ -1237,7 +1233,6 @@
 
       document.getElementById('sc_resultsTitle').textContent = 'Whiteleg Shrimp (Vannamei)';
       document.getElementById('sc_resultsMeta').textContent  = 'ABW: ' + abw + 'g';
-      document.getElementById('sc_feedRate').textContent     = feedPercent + '%';
       document.getElementById('sc_biomass').textContent      = biomass.toFixed(2);
       document.getElementById('sc_shrimpCount').textContent  = Math.round(shrimpAlive).toLocaleString();
       document.getElementById('sc_survival').textContent     = survival.toFixed(2) + '%';
@@ -1266,7 +1261,6 @@
 
       document.getElementById('sc_resultsTitle').textContent = 'Black Tiger Shrimp (Monodon)';
       document.getElementById('sc_resultsMeta').textContent  = 'ABW: ' + abw2 + 'g';
-      document.getElementById('sc_feedRate').textContent     = feedingRate.toFixed(2) + '%';
       document.getElementById('sc_biomass').textContent      = biomass2.toFixed(2);
       document.getElementById('sc_shrimpCount').textContent  = Math.round(shrimpCount).toLocaleString();
       document.getElementById('sc_survival').textContent     = survival2.toFixed(2) + '%';
