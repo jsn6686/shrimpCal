@@ -604,6 +604,15 @@
   }
   .sc-stat-card.highlight .sc-stat-value { color:var(--accent); }
 
+  /* Daily Feed Results */
+  .df-results {
+    margin-top:28px;
+    opacity:0; transform:translateY(14px);
+    transition:opacity 0.45s ease, transform 0.45s ease;
+    display:none;
+  }
+  .df-results.visible { display:block; opacity:1; transform:translateY(0); }
+
   /* ════════════════════════════════════
      PRINT
   ════════════════════════════════════ */
@@ -662,6 +671,9 @@
       </button>
       <button class="tool-btn" onclick="goToTool('survival-calculator')">
         <span class="tool-icon">🧮</span> Survival Calculator
+      </button>
+      <button class="tool-btn" onclick="goToTool('daily-feed')">
+        <span class="tool-icon">🍽️</span> Daily Feed Calculator
       </button>
     </div>
   </div>
@@ -892,6 +904,111 @@
   </div>
 </div>
 
+<!-- ══════════════════════════════
+     PAGE 5 — Daily Feed Calculator
+══════════════════════════════ -->
+<div id="screen5" class="screen">
+
+  <div class="logo-wrap" style="margin-bottom:18px;">
+    <div class="logo-icon">🦐</div>
+  </div>
+
+  <div class="card" style="max-width:700px;">
+    <button class="back-btn" onclick="navigate(2,5)">← Back</button>
+
+    <div class="sc-header">
+      <div class="sc-title">Daily Feed Calculator</div>
+      <div class="sc-subtitle">Calculate Daily Feed & Feed Per Meal</div>
+    </div>
+
+    <!-- Step 01 — Species -->
+    <div class="setup-block">
+      <p class="section-label">01 — Select Species</p>
+      <div class="species-toggle">
+        <button class="species-btn active" id="df_btn_monodon" onclick="selectDFSpecies('monodon', this)">
+          <span class="species-emoji">🦐</span>
+          <span class="species-name">Black Tiger Shrimp</span>
+          <span class="species-latin">Penaeus monodon</span>
+        </button>
+        <button class="species-btn" id="df_btn_vannamei" onclick="selectDFSpecies('vannamei', this)">
+          <span class="species-emoji">🦐</span>
+          <span class="species-name">Whiteleg Shrimp</span>
+          <span class="species-latin">Litopenaeus vannamei</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Step 02 — Inputs -->
+    <div class="setup-block">
+      <p class="section-label">02 — Enter Values</p>
+      <div style="display:flex; flex-direction:column; gap:16px; max-width:420px; margin:0 auto;">
+
+        <div class="input-group">
+          <label for="df_abw">Average Body Weight (ABW) — grams</label>
+          <input type="number" id="df_abw" class="pl-input" placeholder="e.g. 10" min="1" step="0.1" oninput="this.classList.remove('error')" />
+        </div>
+
+        <div class="input-group">
+          <label for="df_stocked">Number of PL Stocked</label>
+          <input type="number" id="df_stocked" class="pl-input" placeholder="e.g. 100000" min="1" step="1000" oninput="this.classList.remove('error')" />
+        </div>
+
+        <div class="input-group">
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:9px;">
+            <label for="df_survival" style="margin-bottom:0;">Survival Rate (%)</label>
+            <span class="slider-value" id="df_survivalDisplay">80%</span>
+          </div>
+          <input type="range" id="df_survival" class="feed-slider" min="1" max="100" value="80" step="1" oninput="updateDFSurvivalDisplay(this.value)" />
+          <div class="slider-ticks">
+            <span class="slider-tick">1%</span>
+            <span class="slider-tick">25%</span>
+            <span class="slider-tick">50%</span>
+            <span class="slider-tick">75%</span>
+            <span class="slider-tick">100%</span>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <label for="df_meals">Number of Meals per Day</label>
+          <input type="number" id="df_meals" class="pl-input" placeholder="e.g. 4" min="1" max="10" step="1" oninput="this.classList.remove('error')" />
+        </div>
+
+        <button class="gen-btn" style="width:100%;" onclick="calculateDailyFeed()">Calculate →</button>
+      </div>
+    </div>
+
+    <!-- Results -->
+    <div class="df-results" id="df_results">
+      <div class="results-header">
+        <div>
+          <p class="results-label">Daily Feed Estimate</p>
+          <h2 class="results-title" id="df_resultsTitle">—</h2>
+        </div>
+        <span class="results-meta" id="df_resultsMeta">—</span>
+      </div>
+      <div class="sc-stats-row" style="grid-template-columns:repeat(2,1fr);">
+        <div class="sc-stat-card">
+          <span class="sc-stat-value" id="df_shrimpAlive">—</span>
+          <span class="sc-stat-label">Shrimp Alive (pcs)</span>
+        </div>
+        <div class="sc-stat-card">
+          <span class="sc-stat-value" id="df_biomass">—</span>
+          <span class="sc-stat-label">Biomass (kg)</span>
+        </div>
+        <div class="sc-stat-card highlight">
+          <span class="sc-stat-value" id="df_dailyFeed">—</span>
+          <span class="sc-stat-label">Daily Feed (kg)</span>
+        </div>
+        <div class="sc-stat-card" style="border-color:rgba(45,156,219,0.4);">
+          <span class="sc-stat-value" id="df_perMeal" style="color:var(--accent2);">—</span>
+          <span class="sc-stat-label">Feed Per Meal (kg)</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
 <script>
   /* ════════════════════════════
      FEED DATA (per 100,000 PL)
@@ -959,6 +1076,20 @@
         if (scBtnMonodon) selectSurvivalSpecies('monodon', scBtnMonodon);
       } catch(e) { console.error('SC reset error:', e); }
       navigate(4, 2);
+    } else if (tool === 'daily-feed') {
+      try {
+        var dfRes = document.getElementById('df_results');
+        if (dfRes) { dfRes.classList.remove('visible'); dfRes.style.display = 'none'; }
+        ['df_abw','df_stocked','df_meals'].forEach(function(id) {
+          var el = document.getElementById(id);
+          if (el) { el.value = ''; el.classList.remove('error'); }
+        });
+        var dfSurvival = document.getElementById('df_survival');
+        if (dfSurvival) { dfSurvival.value = 80; updateDFSurvivalDisplay(80); }
+        var dfBtnMonodon = document.getElementById('df_btn_monodon');
+        if (dfBtnMonodon) selectDFSpecies('monodon', dfBtnMonodon);
+      } catch(e) { console.error('DF reset error:', e); }
+      navigate(5, 2);
     }
   }
 
@@ -1278,6 +1409,83 @@
       });
     });
   }
+
+  /* ════════════════════════════
+     DAILY FEED CALCULATOR
+  ════════════════════════════ */
+  var selectedDFSpecies = 'monodon';
+
+  function selectDFSpecies(sp, btn) {
+    selectedDFSpecies = sp;
+    var screen5 = document.getElementById('screen5');
+    screen5.querySelectorAll('.species-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    // Hide results on species switch
+    var dfRes = document.getElementById('df_results');
+    dfRes.classList.remove('visible');
+    dfRes.style.display = 'none';
+  }
+
+  function updateDFSurvivalDisplay(val) {
+    document.getElementById('df_survivalDisplay').textContent = val + '%';
+    var slider = document.getElementById('df_survival');
+    var fill = ((parseInt(val) - 1) / 99) * 100;
+    slider.style.background = 'linear-gradient(to right, var(--accent2) ' + fill + '%, rgba(30,74,122,0.6) ' + fill + '%)';
+  }
+
+  function calculateDailyFeed() {
+    var abw     = parseFloat(document.getElementById('df_abw').value);
+    var stocked = parseFloat(document.getElementById('df_stocked').value);
+    var survival = parseFloat(document.getElementById('df_survival').value);
+    var meals   = parseFloat(document.getElementById('df_meals').value);
+
+    var valid = true;
+    if (isNaN(abw) || abw <= 0)       { document.getElementById('df_abw').classList.add('error');     valid = false; }
+    if (isNaN(stocked) || stocked < 1) { document.getElementById('df_stocked').classList.add('error'); valid = false; }
+    if (isNaN(meals) || meals < 1)     { document.getElementById('df_meals').classList.add('error');   valid = false; }
+    if (!valid) return;
+
+    // Calculate
+    var shrimpAlive = Math.round(stocked * (survival / 100));
+    var biomass     = (shrimpAlive * abw) / 1000; // kg
+
+    // Get feed rate based on species and ABW
+    var feedRate;
+    if (selectedDFSpecies === 'vannamei') {
+      feedRate = getVannameiFeedPercentage(abw);
+      if (!feedRate) { document.getElementById('df_abw').classList.add('error'); return; }
+    } else {
+      feedRate = getMonodonFeedingRate(abw);
+    }
+
+    var dailyFeed = biomass * (feedRate / 100);
+    var perMeal   = dailyFeed / meals;
+
+    var specName = selectedDFSpecies === 'monodon'
+      ? 'Black Tiger Shrimp (Monodon)'
+      : 'Whiteleg Shrimp (Vannamei)';
+
+    document.getElementById('df_resultsTitle').textContent = specName;
+    document.getElementById('df_resultsMeta').textContent  = 'ABW: ' + abw + 'g  |  SR: ' + survival + '%';
+    document.getElementById('df_shrimpAlive').textContent  = shrimpAlive.toLocaleString();
+    document.getElementById('df_biomass').textContent      = biomass.toFixed(2);
+    document.getElementById('df_dailyFeed').textContent    = dailyFeed.toFixed(2);
+    document.getElementById('df_perMeal').textContent      = perMeal.toFixed(2);
+
+    var dfRes = document.getElementById('df_results');
+    dfRes.style.display = 'block';
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        dfRes.classList.add('visible');
+        dfRes.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  }
+
+  // Init daily feed survival slider on load
+  document.addEventListener('DOMContentLoaded', function() {
+    updateDFSurvivalDisplay(80);
+  });
 </script>
 </body>
 </html>
