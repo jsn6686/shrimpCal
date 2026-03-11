@@ -987,14 +987,6 @@
         <span class="results-meta" id="df_resultsMeta">—</span>
       </div>
       <div class="sc-stats-row" style="grid-template-columns:repeat(2,1fr);">
-        <div class="sc-stat-card">
-          <span class="sc-stat-value" id="df_shrimpAlive">—</span>
-          <span class="sc-stat-label">Shrimp Alive (pcs)</span>
-        </div>
-        <div class="sc-stat-card">
-          <span class="sc-stat-value" id="df_biomass">—</span>
-          <span class="sc-stat-label">Biomass (kg)</span>
-        </div>
         <div class="sc-stat-card highlight">
           <span class="sc-stat-value" id="df_dailyFeed">—</span>
           <span class="sc-stat-label">Daily Feed (kg)</span>
@@ -1467,8 +1459,6 @@
 
     document.getElementById('df_resultsTitle').textContent = specName;
     document.getElementById('df_resultsMeta').textContent  = 'ABW: ' + abw + 'g  |  SR: ' + survival + '%';
-    document.getElementById('df_shrimpAlive').textContent  = shrimpAlive.toLocaleString();
-    document.getElementById('df_biomass').textContent      = biomass.toFixed(2);
     document.getElementById('df_dailyFeed').textContent    = dailyFeed.toFixed(2);
     document.getElementById('df_perMeal').textContent      = perMeal.toFixed(2);
 
