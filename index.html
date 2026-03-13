@@ -4,10 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Shrimp Cal</title>
+ 
+<!-- ▼▼▼ Web App Icon & PWA tags ▼▼▼ -->
+<link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+<link rel="apple-touch-icon" sizes="152x152" href="icon-152.png">
+<link rel="apple-touch-icon" sizes="120x120" href="icon-120.png">
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f2035">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Shrimp Cal">
+<!-- ▲▲▲ Web App Icon & PWA tags ▲▲▲ -->
+ 
 <link href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;600;700&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
+ 
   :root {
     --bg-deep:       #0a1628;
     --border:        #1e4a7a;
@@ -18,7 +29,7 @@
     --text-muted:    #5a8ab0;
     --text-dim:      #3a6a90;
   }
-
+ 
   html, body {
     min-height: 100%;
     background: var(--bg-deep);
@@ -26,7 +37,7 @@
     color: var(--text-main);
     overflow-x: hidden;
   }
-
+ 
   /* Grid background */
   body::before {
     content: ''; position: fixed; inset: 0;
@@ -41,7 +52,7 @@
     background: radial-gradient(ellipse 80% 60% at 50% 0%, transparent 0%, rgba(10,22,40,0.7) 100%);
     pointer-events: none; z-index: 0;
   }
-
+ 
   /* ════════════════════════════════════
      SCREENS
   ════════════════════════════════════ */
@@ -54,15 +65,15 @@
   .screen.active { display: flex; }
   .screen.slide-in   { animation: slideIn   0.35s ease forwards; }
   .screen.slide-back { animation: slideBack 0.35s ease forwards; }
-
+ 
   @keyframes slideIn   { from { opacity:0; transform:translateX(40px);  } to { opacity:1; transform:translateX(0); } }
   @keyframes slideBack { from { opacity:0; transform:translateX(-40px); } to { opacity:1; transform:translateX(0); } }
   @keyframes fadeUp    { from { opacity:0; transform:translateY(18px);  } to { opacity:1; transform:translateY(0); } }
-
+ 
   /* ════════════════════════════════════
      SHARED COMPONENTS
   ════════════════════════════════════ */
-
+ 
   /* Topbar */
   .topbar {
     width:100%; max-width:860px;
@@ -80,7 +91,7 @@
   .topbar-btn.ghost:hover { border-color:var(--border-active); color:var(--text-main); }
   .topbar-btn.primary { background:var(--accent); color:#fff; }
   .topbar-btn.primary:hover { filter:brightness(1.15); }
-
+ 
   /* Logo */
   .logo-wrap {
     display:flex; flex-direction:column; align-items:center; gap:10px;
@@ -108,7 +119,7 @@
     font-size:11px; font-weight:600; letter-spacing:0.2em;
     text-transform:uppercase; color:var(--text-dim);
   }
-
+ 
   /* Card */
   .card {
     width:100%; max-width:830px;
@@ -118,7 +129,7 @@
     box-shadow:0 0 0 1px rgba(45,156,219,0.06), 0 24px 80px rgba(0,0,0,0.5), inset 0 1px 0 rgba(45,156,219,0.08);
     opacity:0; animation:fadeUp 0.7s ease 0.35s forwards;
   }
-
+ 
   /* Back button */
   .back-btn {
     display:inline-flex; align-items:center; gap:7px;
@@ -130,13 +141,13 @@
     margin-bottom:28px;
   }
   .back-btn:hover { border-color:var(--border-active); color:var(--text-main); }
-
+ 
   /* Section label */
   .section-label {
     font-size:11px; font-weight:700; letter-spacing:0.18em;
     text-transform:uppercase; color:var(--accent2); margin-bottom:14px;
   }
-
+ 
   /* ════════════════════════════════════
      PAGE 2 — TOOL SELECTION
   ════════════════════════════════════ */
@@ -144,7 +155,7 @@
     text-align:center; font-size:22px; font-weight:300;
     letter-spacing:0.1em; color:var(--text-muted); margin-bottom:40px;
   }
-
+ 
   .tool-list { display:flex; flex-direction:column; gap:20px; }
   .tool-btn {
     width:100%;
@@ -170,11 +181,11 @@
   }
   .tool-btn:hover::after { left:120%; }
   .tool-icon { font-size:22px; opacity:0.75; }
-
+ 
   /* ════════════════════════════════════
      PAGE 3 — FEED CHART
   ════════════════════════════════════ */
-
+ 
   /* Page header */
   .fc-header {
     text-align:center; margin-bottom:36px;
@@ -188,14 +199,14 @@
     font-size:11px; font-weight:600; letter-spacing:0.22em;
     text-transform:uppercase; color:var(--text-dim);
   }
-
+ 
   /* Setup block */
   .setup-block {
     background:rgba(10,22,40,0.5);
     border:1px solid var(--border); border-radius:14px;
     padding:24px 26px; margin-bottom:20px;
   }
-
+ 
   /* Species toggle */
   .species-toggle { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
   .species-btn {
@@ -214,7 +225,7 @@
   .species-emoji { font-size:28px; display:block; margin-bottom:10px; filter:drop-shadow(0 0 6px rgba(244,114,11,0.45)); }
   .species-name  { font-size:14px; font-weight:700; display:block; margin-bottom:4px; }
   .species-latin { font-size:11px; font-style:italic; color:var(--text-dim); display:block; }
-
+ 
   /* PL Input */
   .input-row { display:flex; gap:12px; align-items:flex-end; }
   .input-group { flex:1; }
@@ -235,7 +246,7 @@
   .pl-input::placeholder { color:var(--text-dim); }
   .pl-input:focus { border-color:var(--border-active); box-shadow:0 0 0 3px rgba(45,156,219,0.12); }
   .pl-input.error { border-color:rgba(255,90,90,0.7) !important; }
-
+ 
   .gen-btn {
     padding:14px 28px; white-space:nowrap;
     background:var(--accent2); border:none; border-radius:10px;
@@ -252,7 +263,7 @@
     transform:skewX(-15deg); transition:left 0.5s; pointer-events:none;
   }
   .gen-btn:hover::after { left:120%; }
-
+ 
   /* Feed % Slider */
   .slider-block {
     margin-top: 16px; padding: 16px 20px;
@@ -282,7 +293,7 @@
   }
   .slider-ticks { display:flex; justify-content:space-between; margin-top:6px; padding:0 2px; }
   .slider-tick { font-size:10px; color:var(--text-dim); font-weight:500; }
-
+ 
   /* ── Results ── */
   .results {
     margin-top:28px;
@@ -291,12 +302,12 @@
     display:none;
   }
   .results.visible { display:block; opacity:1; transform:translateY(0); }
-
+ 
   @keyframes fadeUp2 {
     from { opacity:0; transform:translateY(20px); }
     to   { opacity:1; transform:translateY(0); }
   }
-
+ 
   .results-header {
     display:flex; justify-content:space-between; align-items:flex-start;
     flex-wrap:wrap; gap:12px; margin-bottom:20px;
@@ -315,7 +326,7 @@
     font-size:13px; font-weight:700; color:var(--accent2); letter-spacing:0.06em;
     white-space:nowrap;
   }
-
+ 
   /* Stats */
   .stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-bottom:22px; }
   .stat-card {
@@ -330,12 +341,12 @@
     font-size:10px; font-weight:600; letter-spacing:0.14em;
     text-transform:uppercase; color:var(--text-dim); margin-top:5px; display:block;
   }
-
+ 
   /* Phase legend */
   .legend { display:flex; gap:20px; margin-bottom:14px; flex-wrap:wrap; }
   .legend-item { display:flex; align-items:center; gap:6px; font-size:12px; font-weight:500; color:var(--text-muted); }
   .legend-dot  { width:9px; height:9px; border-radius:50%; flex-shrink:0; }
-
+ 
   /* Table */
   .table-wrap {
     background:linear-gradient(145deg, rgba(15,39,68,0.5) 0%, rgba(10,22,40,0.7) 100%);
@@ -355,15 +366,15 @@
   tbody tr:last-child { border-bottom:none; }
   td { padding:11px 16px; color:var(--text-main); font-size:13px; text-align:center; }
   td:first-child { font-family:'Exo 2',sans-serif; font-weight:700; font-size:15px; text-align:left; width:60px; }
-
+ 
   /* Phase left-border accent */
   .phase-1 td:first-child { color:#2d9cdb; border-left:2px solid #2d9cdb; }
   .phase-2 td:first-child { color:#f4720b; border-left:2px solid #f4720b; }
   .phase-3 td:first-child { color:#27ae60; border-left:2px solid #27ae60; }
-
+ 
   td.feed-day  { font-weight:600; color:#fff; }
   td.cumul     { font-weight:500; color:var(--text-muted); font-size:12.5px; }
-
+ 
   .feed-code { display:inline-flex; gap:5px; flex-wrap:wrap; }
   .code-tag {
     background:rgba(45,156,219,0.12); border:1px solid rgba(45,156,219,0.28);
@@ -371,7 +382,7 @@
     font-family:'Exo 2',sans-serif; font-size:11px; font-weight:700;
     color:var(--accent2); white-space:nowrap; letter-spacing:0.03em;
   }
-
+ 
   /* ════════════════════════════════════
      PRINT STYLES — looks like the reference chart
   ════════════════════════════════════ */
@@ -385,16 +396,16 @@
       margin: 0; padding: 0;
     }
     body::before, body::after { display: none !important; }
-
+ 
     /* Hide all screens except the feed chart screen */
     .screen { display: none !important; }
     #screen3 { display: block !important; padding: 0 !important; min-height: unset !important; }
-
+ 
     /* Hide navigation, setup, buttons, stats, legend, action-row */
     .topbar, .back-btn, .setup-block, .gen-btn,
     .stats-row, .legend, .action-row,
     .fc-subtitle { display: none !important; }
-
+ 
     /* Page title area */
     .fc-header { margin-bottom: 10px !important; }
     .fc-title {
@@ -406,7 +417,7 @@
       letter-spacing: 0.05em !important;
       text-align: center !important;
     }
-
+ 
     /* PL count banner */
     .results-header {
       border: 1.5px solid #000 !important;
@@ -440,7 +451,7 @@
       letter-spacing: 0 !important;
       padding: 0 !important;
     }
-
+ 
     /* Card: remove styling */
     .card {
       background: #fff !important;
@@ -452,14 +463,14 @@
       opacity: 1 !important;
       animation: none !important;
     }
-
+ 
     /* Results: always visible */
     .results {
       display: block !important;
       opacity: 1 !important;
       transform: none !important;
     }
-
+ 
     /* Table wrapper */
     .table-wrap {
       background: #fff !important;
@@ -467,7 +478,7 @@
       border-radius: 0 !important;
       overflow: visible !important;
     }
-
+ 
     /* Table */
     table {
       width: 100% !important;
@@ -493,7 +504,7 @@
     }
     thead th:first-child { text-align: center !important; }
     thead th:last-child { border-right: none !important; }
-
+ 
     tbody tr {
       border-top: 1px solid #ccc !important;
       background: #fff !important;
@@ -517,7 +528,7 @@
       border-right: 1px solid #ccc !important;
     }
     td:last-child { border-right: none !important; }
-
+ 
     /* Phase colors — remove on print */
     .phase-1 td:first-child,
     .phase-2 td:first-child,
@@ -525,10 +536,10 @@
       color: #000 !important;
       border-left: none !important;
     }
-
+ 
     td.feed-day { color: #000 !important; font-weight: bold !important; }
     td.cumul    { color: #000 !important; font-size: 11pt !important; }
-
+ 
     /* Feed code tags */
     .feed-code { display: inline !important; }
     .code-tag {
@@ -541,13 +552,13 @@
       padding: 0 !important;
       letter-spacing: 0 !important;
     }
-
+ 
     /* Page break settings */
     @page { margin: 15mm; size: A4 portrait; }
     table { page-break-inside: auto; }
     tr { page-break-inside: avoid; }
   }
-
+ 
   /* Export bar */
   .action-row { display:flex; gap:12px; flex-wrap:wrap; }
   .export-btn {
@@ -560,7 +571,7 @@
   .export-btn.primary:hover  { filter:brightness(1.1); transform:translateY(-2px); }
   .export-btn.secondary{ background:transparent; border:1.5px solid var(--border); color:var(--text-muted); }
   .export-btn.secondary:hover { border-color:var(--border-active); color:var(--text-main); transform:translateY(-2px); }
-
+ 
   /* ════════════════════════════════════
      PAGE 4 — SURVIVAL CALCULATOR
   ════════════════════════════════════ */
@@ -576,7 +587,7 @@
     font-size:11px; font-weight:600; letter-spacing:0.22em;
     text-transform:uppercase; color:var(--text-dim);
   }
-
+ 
   .sc-results {
     margin-top:28px;
     opacity:0; transform:translateY(14px);
@@ -584,9 +595,9 @@
     display:none;
   }
   .sc-results.visible { display:block; opacity:1; transform:translateY(0); }
-
+ 
   .sc-stats-row { display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:8px; }
-
+ 
   @media (max-width:540px) {
     .sc-stats-row { grid-template-columns:1fr; }
   }
@@ -603,7 +614,7 @@
     text-transform:uppercase; color:var(--text-dim); margin-top:5px; display:block;
   }
   .sc-stat-card.highlight .sc-stat-value { color:var(--accent); }
-
+ 
   /* Daily Feed Results */
   .df-results {
     margin-top:28px;
@@ -612,7 +623,7 @@
     display:none;
   }
   .df-results.visible { display:block; opacity:1; transform:translateY(0); }
-
+ 
   /* ════════════════════════════════════
      PRINT
   ════════════════════════════════════ */
@@ -635,7 +646,7 @@
     .legend-item { color:#333; }
     .fc-title, .fc-subtitle { color:#003; }
   }
-
+ 
   /* ════════════════════════════════════
      RESPONSIVE
   ════════════════════════════════════ */
@@ -653,7 +664,7 @@
 </style>
 </head>
 <body>
-
+ 
 <!-- ══════════════════════════════
      PAGE 2 — Tool Selection
 ══════════════════════════════ -->
@@ -678,24 +689,24 @@
     </div>
   </div>
 </div>
-
+ 
 <!-- ══════════════════════════════
      PAGE 3 — Feed Chart
 ══════════════════════════════ -->
 <div id="screen3" class="screen">
-
+ 
   <div class="logo-wrap" style="margin-bottom:18px;">
     <div class="logo-icon">🦐</div>
   </div>
-
+ 
   <div class="card" style="max-width:700px;">
     <button class="back-btn" onclick="navigate(2,3)">← Back</button>
-
+ 
     <div class="fc-header">
       <div class="fc-title">Shrimp Feed Chart</div>
       <div class="fc-subtitle">Post Larvae Feeding Schedule Generator</div>
     </div>
-
+ 
     <!-- Step 01 — Species -->
     <div class="setup-block">
       <p class="section-label">01 — Select Species</p>
@@ -712,7 +723,7 @@
         </button>
       </div>
     </div>
-
+ 
     <!-- Step 02 — PL Count -->
     <div class="setup-block">
       <p class="section-label">02 — Enter Post Larvae Count</p>
@@ -744,10 +755,10 @@
         <button class="gen-btn" onclick="generateChart()">Generate Chart →</button>
       </div>
     </div><!-- /setup-block -->
-
+ 
     <!-- Results -->
     <div class="results" id="results">
-
+ 
       <div class="results-header">
         <div>
           <p class="results-label">Feed Schedule</p>
@@ -755,7 +766,7 @@
         </div>
         <span class="results-meta" id="resultsMeta">—</span>
       </div>
-
+ 
       <div class="stats-row">
         <div class="stat-card">
           <span class="stat-value" id="statTotal">—</span>
@@ -770,13 +781,13 @@
           <span class="stat-label">kg per 10K PL</span>
         </div>
       </div>
-
+ 
       <div class="legend">
         <div class="legend-item"><div class="legend-dot" style="background:#2d9cdb"></div>Phase 1: Starter</div>
         <div class="legend-item"><div class="legend-dot" style="background:#f4720b"></div>Phase 2: Transition</div>
         <div class="legend-item"><div class="legend-dot" style="background:#27ae60"></div>Phase 3: Growth</div>
       </div>
-
+ 
       <div class="table-wrap">
         <table id="feedTable">
           <thead>
@@ -790,35 +801,35 @@
           <tbody id="tableBody"></tbody>
         </table>
       </div>
-
+ 
       <div class="action-row">
         <button class="export-btn primary" onclick="exportPDF()">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
           Download Print Page
         </button>
       </div>
-
+ 
     </div><!-- /results -->
   </div>
 </div>
-
+ 
 <!-- ══════════════════════════════
      PAGE 4 — Survival Calculator
 ══════════════════════════════ -->
 <div id="screen4" class="screen">
-
+ 
   <div class="logo-wrap" style="margin-bottom:18px;">
     <div class="logo-icon">🦐</div>
   </div>
-
+ 
   <div class="card" style="max-width:700px;">
     <button class="back-btn" onclick="navigate(2,4)">← Back</button>
-
+ 
     <div class="sc-header">
       <div class="sc-title">Survival Calculator</div>
       <div class="sc-subtitle">Estimate Shrimp Survival Rate</div>
     </div>
-
+ 
     <!-- Step 01 — Species -->
     <div class="setup-block">
       <p class="section-label">01 — Select Species</p>
@@ -835,7 +846,7 @@
         </button>
       </div>
     </div>
-
+ 
     <!-- Step 02 — Inputs (Vannamei) -->
     <div class="setup-block" id="sc_inputs_vannamei" style="display:none;">
       <p class="section-label">02 — Enter Values</p>
@@ -855,7 +866,7 @@
         <button class="gen-btn" style="width:100%;" onclick="calculateSurvival()">Calculate →</button>
       </div>
     </div>
-
+ 
     <!-- Step 02 — Inputs (Monodon) -->
     <div class="setup-block" id="sc_inputs_monodon">
       <p class="section-label">02 — Enter Values</p>
@@ -875,7 +886,7 @@
         <button class="gen-btn" style="width:100%;" onclick="calculateSurvival()">Calculate →</button>
       </div>
     </div>
-
+ 
     <!-- Results -->
     <div class="sc-results" id="sc_results">
       <div class="results-header">
@@ -900,27 +911,27 @@
         </div>
       </div>
     </div>
-
+ 
   </div>
 </div>
-
+ 
 <!-- ══════════════════════════════
      PAGE 5 — Daily Feed Calculator
 ══════════════════════════════ -->
 <div id="screen5" class="screen">
-
+ 
   <div class="logo-wrap" style="margin-bottom:18px;">
     <div class="logo-icon">🦐</div>
   </div>
-
+ 
   <div class="card" style="max-width:700px;">
     <button class="back-btn" onclick="navigate(2,5)">← Back</button>
-
+ 
     <div class="sc-header">
       <div class="sc-title">Daily Feed Calculator</div>
       <div class="sc-subtitle">Calculate Daily Feed & Feed Per Meal</div>
     </div>
-
+ 
     <!-- Step 01 — Species -->
     <div class="setup-block">
       <p class="section-label">01 — Select Species</p>
@@ -937,22 +948,22 @@
         </button>
       </div>
     </div>
-
+ 
     <!-- Step 02 — Inputs -->
     <div class="setup-block">
       <p class="section-label">02 — Enter Values</p>
       <div style="display:flex; flex-direction:column; gap:16px; max-width:420px; margin:0 auto;">
-
+ 
         <div class="input-group">
           <label for="df_abw">Average Body Weight (ABW) — grams</label>
           <input type="number" id="df_abw" class="pl-input" placeholder="e.g. 10" min="1" step="0.1" oninput="this.classList.remove('error')" />
         </div>
-
+ 
         <div class="input-group">
           <label for="df_stocked">Number of PL Stocked</label>
           <input type="number" id="df_stocked" class="pl-input" placeholder="e.g. 100000" min="1" step="1000" oninput="this.classList.remove('error')" />
         </div>
-
+ 
         <div class="input-group">
           <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:9px;">
             <label for="df_survival" style="margin-bottom:0;">Survival Rate (%)</label>
@@ -967,16 +978,16 @@
             <span class="slider-tick">100%</span>
           </div>
         </div>
-
+ 
         <div class="input-group">
           <label for="df_meals">Number of Meals per Day</label>
           <input type="number" id="df_meals" class="pl-input" placeholder="e.g. 4" min="1" max="10" step="1" oninput="this.classList.remove('error')" />
         </div>
-
+ 
         <button class="gen-btn" style="width:100%;" onclick="calculateDailyFeed()">Calculate →</button>
       </div>
     </div>
-
+ 
     <!-- Results -->
     <div class="df-results" id="df_results">
       <div class="results-header">
@@ -997,10 +1008,10 @@
         </div>
       </div>
     </div>
-
+ 
   </div>
 </div>
-
+ 
 <script>
   /* ════════════════════════════
      FEED DATA (per 100,000 PL)
@@ -1014,7 +1025,7 @@
     [23,8.0,"No.02"],[24,8.3,"No.02"],[25,8.6,"No.02+No.03"],[26,8.9,"No.02+No.03"],
     [27,9.2,"No.02+No.03"],[28,9.5,"No.02+No.03"],[29,9.8,"No.02+No.03"],[30,10.1,"No.02+No.03"]
   ];
-
+ 
   const VANNAMEI_BASE = [
     [1,2.0,"No 01"],[2,2.3,"No 01"],[3,2.6,"No 01"],[4,2.9,"No 01"],[5,3.2,"No 01"],
     [6,3.6,"No 01"],[7,4.0,"No 01"],[8,4.4,"No 01"],[9,4.8,"No 01"],[10,5.2,"No 01"],
@@ -1024,9 +1035,9 @@
     [23,12.8,"No 1s"],[24,13.5,"No 1s"],[25,14.2,"No 1s"],[26,15.0,"No 1s"],
     [27,15.8,"No 1s"],[28,16.6,"No 1s"],[29,17.4,"No 1s"],[30,18.2,"No 1s"]
   ];
-
+ 
   let selectedSpecies = 'monodon';
-
+ 
   /* ════════════════════════════
      NAVIGATION
   ════════════════════════════ */
@@ -1042,7 +1053,7 @@
       window.scrollTo(0, 0);
     } catch(e) { console.error('navigate error:', e); }
   }
-
+ 
   function goToTool(tool) {
     if (tool === 'feed-chart') {
       try {
@@ -1084,7 +1095,7 @@
       navigate(5, 2);
     }
   }
-
+ 
   /* ════════════════════════════
      SPECIES TOGGLE
   ════════════════════════════ */
@@ -1095,7 +1106,7 @@
     // Re-generate if a PL count already entered
     if (document.getElementById('plCount').value) generateChart();
   }
-
+ 
   /* ════════════════════════════
      HELPERS
   ════════════════════════════ */
@@ -1104,13 +1115,13 @@
     if (doc <= 24) return 2;
     return 3;
   }
-
+ 
   function formatFeedCode(code) {
     return '<div class="feed-code">' +
       code.split('+').map(c => `<span class="code-tag">${c.trim()}</span>`).join(' <span style="color:var(--text-dim)">+</span> ') +
       '</div>';
   }
-
+ 
   /* ════════════════════════════
      GENERATE
   ════════════════════════════ */
@@ -1122,21 +1133,21 @@
       setTimeout(() => inp.classList.remove('error'), 1500);
       return;
     }
-
+ 
     const sliderPct = parseFloat(document.getElementById('feedSlider').value) / 100;
     const ratio    = (pl / 100000) * sliderPct;
     const BASE     = selectedSpecies === 'monodon' ? MONODON_BASE : VANNAMEI_BASE;
     const specName = selectedSpecies === 'monodon'
       ? 'Black Tiger Shrimp (Monodon)'
       : 'Whiteleg Shrimp (Vannamei)';
-
+ 
     document.getElementById('resultsTitle').textContent = specName;
     document.getElementById('resultsMeta').textContent  = pl.toLocaleString() + ' PL';
-
+ 
     let cumulative = 0;
     const tbody = document.getElementById('tableBody');
     tbody.innerHTML = '';
-
+ 
     BASE.forEach(([doc, feedBase, code]) => {
       const feed = +(feedBase * ratio).toFixed(2);
       cumulative = +(cumulative + feed).toFixed(2);
@@ -1151,10 +1162,10 @@
       `;
       tbody.appendChild(tr);
     });
-
+ 
     document.getElementById('statTotal').textContent = cumulative.toFixed(1);
     document.getElementById('statRatio').textContent = (cumulative / (pl / 10000)).toFixed(1);
-
+ 
     const results = document.getElementById('results');
     results.style.display = 'block';
     requestAnimationFrame(() => requestAnimationFrame(() => {
@@ -1162,7 +1173,7 @@
       results.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }));
   }
-
+ 
   function onSliderChange(val) {
     const pct = parseInt(val);
     document.getElementById('sliderDisplay').textContent = pct + '%';
@@ -1174,12 +1185,12 @@
     const results = document.getElementById('results');
     if (results.style.display === 'block') generateChart();
   }
-
+ 
   // Init slider track on load
   document.addEventListener('DOMContentLoaded', function() {
     onSliderChange(100);
   });
-
+ 
   /* ════════════════════════════
      EXPORT
   ════════════════════════════ */
@@ -1188,7 +1199,7 @@
     const ratio  = pl / 100000;
     const BASE   = selectedSpecies === 'monodon' ? MONODON_BASE : VANNAMEI_BASE;
     const name   = selectedSpecies === 'monodon' ? 'Monodon' : 'Vannamei';
-
+ 
     let csv = `Shrimp Feed Chart - ${name}\nPL Count: ${pl}\n\nDOC,Feed Code,Feed/Day (kg),Cumulative (kg)\n`;
     let cum = 0;
     BASE.forEach(([doc, feedBase, code]) => {
@@ -1196,14 +1207,14 @@
       cum = +(cum + feed).toFixed(2);
       csv += `${doc},"${code}",${feed},${cum}\n`;
     });
-
+ 
     const blob = new Blob([csv], { type:'text/csv' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = `feed-chart-${name.toLowerCase()}-${pl}PL.csv`;
     a.click();
   }
-
+ 
   function exportPDF() {
     const pl       = document.getElementById('plCount').value;
     const ratio    = (parseFloat(pl) / 100000) * (parseFloat(document.getElementById('feedSlider').value) / 100);
@@ -1211,7 +1222,7 @@
     const specName = selectedSpecies === 'monodon'
       ? 'BLACK TIGER SHRIMP (MONODON) FEED CHART'
       : 'VANNAMEI FEED CHART';
-
+ 
     let rows = '';
     let cum  = 0;
     BASE.forEach(function(entry) {
@@ -1226,7 +1237,7 @@
         '<td>' + cum.toFixed(2) + '</td>' +
         '</tr>';
     });
-
+ 
     const html = '<!DOCTYPE html>\n' +
 '<html>\n<head>\n<meta charset="UTF-8">\n' +
 '<title>' + specName + '</title>\n' +
@@ -1260,7 +1271,7 @@
 '  </table>\n' +
 '  <div class="footer">Generated by <strong>ShrimpCal</strong></div>\n' +
 '<\/body>\n<\/html>';
-
+ 
     const blob = new Blob([html], { type: 'text/html' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
@@ -1270,26 +1281,26 @@
     document.body.removeChild(a);
     URL.revokeObjectURL(a.href);
   }
-
+ 
   /* Keyboard */
   document.querySelectorAll('#screen3 .species-btn').forEach(btn => {
     btn.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') btn.click(); });
   });
-
+ 
   /* ════════════════════════════
      SURVIVAL CALCULATOR
   ════════════════════════════ */
   var selectedSurvivalSpecies = 'monodon';
-
+ 
   function selectSurvivalSpecies(sp, btn) {
     selectedSurvivalSpecies = sp;
-
+ 
     // Scope strictly to screen4 species buttons only
     var screen4 = document.getElementById('screen4');
     var btns = screen4.querySelectorAll('.species-btn');
     btns.forEach(function(b) { b.classList.remove('active'); });
     btn.classList.add('active');
-
+ 
     // Show/hide input panels
     var vPanel = document.getElementById('sc_inputs_vannamei');
     var mPanel = document.getElementById('sc_inputs_monodon');
@@ -1300,19 +1311,19 @@
       vPanel.style.display = 'none';
       mPanel.style.display = 'block';
     }
-
+ 
     // Clear all inputs
     ['sc_v_abw','sc_v_dailyFeed','sc_v_stocked','sc_m_abw','sc_m_feed','sc_m_stocking'].forEach(function(id) {
       var el = document.getElementById(id);
       if (el) { el.value = ''; el.classList.remove('error'); }
     });
-
+ 
     // Hide results
     var scRes = document.getElementById('sc_results');
     scRes.classList.remove('visible');
     scRes.style.display = 'none';
   }
-
+ 
   // Vannamei feed table: weight(g) → feed%
   function getVannameiFeedPercentage(weight) {
     var feedTable = {
@@ -1323,7 +1334,7 @@
     };
     return feedTable[Math.round(weight)];
   }
-
+ 
   // Monodon feeding rate: 3.1% @ ≤10g → 1.4% @ ≥40g
   function getMonodonFeedingRate(weight) {
     var minW = 10, maxW = 40, startRate = 3.1, endRate = 1.4;
@@ -1331,15 +1342,15 @@
     if (weight >= maxW) return endRate;
     return startRate - ((startRate - endRate) / (maxW - minW)) * (weight - minW);
   }
-
+ 
   function calculateSurvival() {
     var scRes = document.getElementById('sc_results');
-
+ 
     if (selectedSurvivalSpecies === 'vannamei') {
       var abw       = parseFloat(document.getElementById('sc_v_abw').value);
       var dailyFeed = parseFloat(document.getElementById('sc_v_dailyFeed').value);
       var stocked   = parseFloat(document.getElementById('sc_v_stocked').value);
-
+ 
       var valid = true;
       if (isNaN(abw) || abw < 3 || abw > 30) {
         document.getElementById('sc_v_abw').classList.add('error'); valid = false;
@@ -1351,24 +1362,24 @@
         document.getElementById('sc_v_stocked').classList.add('error'); valid = false;
       }
       if (!valid) return;
-
+ 
       var feedPercent = getVannameiFeedPercentage(abw);
       if (!feedPercent) { alert('ABW out of table range (3–30g)'); return; }
       var biomass     = dailyFeed / (feedPercent / 100);
       var shrimpAlive = (biomass * 1000) / abw;
       var survival    = (shrimpAlive / stocked) * 100;
-
+ 
       document.getElementById('sc_resultsTitle').textContent = 'Whiteleg Shrimp (Vannamei)';
       document.getElementById('sc_resultsMeta').textContent  = 'ABW: ' + abw + 'g';
       document.getElementById('sc_biomass').textContent      = biomass.toFixed(2);
       document.getElementById('sc_shrimpCount').textContent  = Math.round(shrimpAlive).toLocaleString();
       document.getElementById('sc_survival').textContent     = survival.toFixed(2) + '%';
-
+ 
     } else {
       var abw2      = parseFloat(document.getElementById('sc_m_abw').value);
       var feed2     = parseFloat(document.getElementById('sc_m_feed').value);
       var stocking2 = parseFloat(document.getElementById('sc_m_stocking').value);
-
+ 
       var valid2 = true;
       if (isNaN(abw2) || abw2 <= 0) {
         document.getElementById('sc_m_abw').classList.add('error'); valid2 = false;
@@ -1380,19 +1391,19 @@
         document.getElementById('sc_m_stocking').classList.add('error'); valid2 = false;
       }
       if (!valid2) return;
-
+ 
       var feedingRate = getMonodonFeedingRate(abw2);
       var biomass2    = feed2 / (feedingRate / 100);
       var shrimpCount = biomass2 / (abw2 / 1000);
       var survival2   = (shrimpCount / stocking2) * 100;
-
+ 
       document.getElementById('sc_resultsTitle').textContent = 'Black Tiger Shrimp (Monodon)';
       document.getElementById('sc_resultsMeta').textContent  = 'ABW: ' + abw2 + 'g';
       document.getElementById('sc_biomass').textContent      = biomass2.toFixed(2);
       document.getElementById('sc_shrimpCount').textContent  = Math.round(shrimpCount).toLocaleString();
       document.getElementById('sc_survival').textContent     = survival2.toFixed(2) + '%';
     }
-
+ 
     scRes.style.display = 'block';
     requestAnimationFrame(function() {
       requestAnimationFrame(function() {
@@ -1401,12 +1412,12 @@
       });
     });
   }
-
+ 
   /* ════════════════════════════
      DAILY FEED CALCULATOR
   ════════════════════════════ */
   var selectedDFSpecies = 'monodon';
-
+ 
   function selectDFSpecies(sp, btn) {
     selectedDFSpecies = sp;
     var screen5 = document.getElementById('screen5');
@@ -1417,30 +1428,30 @@
     dfRes.classList.remove('visible');
     dfRes.style.display = 'none';
   }
-
+ 
   function updateDFSurvivalDisplay(val) {
     document.getElementById('df_survivalDisplay').textContent = val + '%';
     var slider = document.getElementById('df_survival');
     var fill = ((parseInt(val) - 1) / 99) * 100;
     slider.style.background = 'linear-gradient(to right, var(--accent2) ' + fill + '%, rgba(30,74,122,0.6) ' + fill + '%)';
   }
-
+ 
   function calculateDailyFeed() {
     var abw     = parseFloat(document.getElementById('df_abw').value);
     var stocked = parseFloat(document.getElementById('df_stocked').value);
     var survival = parseFloat(document.getElementById('df_survival').value);
     var meals   = parseFloat(document.getElementById('df_meals').value);
-
+ 
     var valid = true;
     if (isNaN(abw) || abw <= 0)       { document.getElementById('df_abw').classList.add('error');     valid = false; }
     if (isNaN(stocked) || stocked < 1) { document.getElementById('df_stocked').classList.add('error'); valid = false; }
     if (isNaN(meals) || meals < 1)     { document.getElementById('df_meals').classList.add('error');   valid = false; }
     if (!valid) return;
-
+ 
     // Calculate
     var shrimpAlive = Math.round(stocked * (survival / 100));
     var biomass     = (shrimpAlive * abw) / 1000; // kg
-
+ 
     // Get feed rate based on species and ABW
     var feedRate;
     if (selectedDFSpecies === 'vannamei') {
@@ -1449,19 +1460,19 @@
     } else {
       feedRate = getMonodonFeedingRate(abw);
     }
-
+ 
     var dailyFeed = biomass * (feedRate / 100);
     var perMeal   = dailyFeed / meals;
-
+ 
     var specName = selectedDFSpecies === 'monodon'
       ? 'Black Tiger Shrimp (Monodon)'
       : 'Whiteleg Shrimp (Vannamei)';
-
+ 
     document.getElementById('df_resultsTitle').textContent = specName;
     document.getElementById('df_resultsMeta').textContent  = 'ABW: ' + abw + 'g  |  SR: ' + survival + '%';
     document.getElementById('df_dailyFeed').textContent    = dailyFeed.toFixed(2);
     document.getElementById('df_perMeal').textContent      = perMeal.toFixed(2);
-
+ 
     var dfRes = document.getElementById('df_results');
     dfRes.style.display = 'block';
     requestAnimationFrame(function() {
@@ -1471,7 +1482,7 @@
       });
     });
   }
-
+ 
   // Init daily feed survival slider on load
   document.addEventListener('DOMContentLoaded', function() {
     updateDFSurvivalDisplay(80);
@@ -1479,3 +1490,4 @@
 </script>
 </body>
 </html>
+ 
