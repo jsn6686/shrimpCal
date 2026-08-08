@@ -625,27 +625,47 @@
   .df-results.visible { display:block; opacity:1; transform:translateY(0); }
  
   /* ════════════════════════════════════
-     PRINT
+     PAGE 6 — CHEMICAL CALCULATOR
   ════════════════════════════════════ */
-  @media print {
-    body { background:#fff; color:#000; }
-    body::before, body::after { display:none; }
-    .topbar, .back-btn, .setup-block, .action-row { display:none !important; }
-    .screen { padding:20px; }
-    .card { box-shadow:none; border:none; background:#fff; animation:none; opacity:1; }
-    .results { display:block !important; opacity:1; transform:none; }
-    thead th { color:#004 !important; background:#e8f4fb !important; }
-    td { color:#111 !important; }
-    .code-tag { background:#e6f4ff; color:#005; border-color:#99c; }
-    .stat-card { background:#f0f8ff; border-color:#99c; }
-    .stat-value { color:#0077b6; }
-    .stat-label, .cumul { color:#555; }
-    .results-title { color:#003; }
-    .results-meta { background:#e6f4ff; color:#0077b6; border-color:#99c; }
-    .table-wrap { border-color:#ccc; }
-    .legend-item { color:#333; }
-    .fc-title, .fc-subtitle { color:#003; }
+  .cc-header {
+    text-align:center; margin-bottom:36px;
   }
+  .cc-title {
+    font-family:'Orbitron',sans-serif; font-size:34px; font-weight:700;
+    color:var(--accent2); letter-spacing:0.02em;
+    text-shadow:0 0 30px rgba(45,156,219,0.4); margin-bottom:7px;
+  }
+  .cc-subtitle {
+    font-size:11px; font-weight:600; letter-spacing:0.22em;
+    text-transform:uppercase; color:var(--text-dim);
+  }
+ 
+  /* Chemical toggle (reuses species-toggle visual language) */
+  .chem-toggle { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .chem-btn {
+    background:linear-gradient(155deg, rgba(15,39,68,0.5) 0%, rgba(10,22,40,0.7) 100%);
+    border:1.5px solid var(--border); border-radius:12px;
+    padding:22px 16px; cursor:pointer; transition:all 0.22s;
+    text-align:center; font-family:'Exo 2',sans-serif;
+    color:var(--text-main); position:relative; overflow:hidden;
+  }
+  .chem-btn:hover { border-color:var(--border-active); transform:translateY(-2px); }
+  .chem-btn.active {
+    border-color:var(--border-active);
+    background:linear-gradient(155deg, rgba(20,55,90,0.7) 0%, rgba(13,31,60,0.9) 100%);
+    box-shadow:0 0 0 2px rgba(45,156,219,0.25), 0 8px 28px rgba(45,156,219,0.15);
+  }
+  .chem-emoji { font-size:28px; display:block; margin-bottom:10px; filter:drop-shadow(0 0 6px rgba(244,114,11,0.45)); }
+  .chem-name  { font-size:14px; font-weight:700; display:block; margin-bottom:4px; }
+  .chem-sub   { font-size:11px; font-style:italic; color:var(--text-dim); display:block; }
+ 
+  .cc-results {
+    margin-top:28px;
+    opacity:0; transform:translateY(14px);
+    transition:opacity 0.45s ease, transform 0.45s ease;
+    display:none;
+  }
+  .cc-results.visible { display:block; opacity:1; transform:translateY(0); }
  
   /* ════════════════════════════════════
      RESPONSIVE
@@ -656,6 +676,7 @@
     .tool-btn { font-size:18px; padding:24px; }
     .fc-title { font-size:26px; }
     .species-toggle { grid-template-columns:1fr; }
+    .chem-toggle { grid-template-columns:1fr; }
     .input-row { flex-direction:column; }
     .gen-btn { width:100%; }
     .stats-row { grid-template-columns:1fr; }
@@ -685,6 +706,9 @@
       </button>
       <button class="tool-btn" onclick="goToTool('daily-feed')">
         <span class="tool-icon">🍽️</span> Daily Feed Calculator
+      </button>
+      <button class="tool-btn" onclick="goToTool('chemical-calculator')">
+        <span class="tool-icon">🧪</span> Chemical Calculator
       </button>
     </div>
   </div>
@@ -1012,6 +1036,128 @@
   </div>
 </div>
  
+<!-- ══════════════════════════════
+     PAGE 6 — Chemical Calculator
+══════════════════════════════ -->
+<div id="screen6" class="screen">
+ 
+  <div class="logo-wrap" style="margin-bottom:18px;">
+    <div class="logo-icon">🦐</div>
+  </div>
+ 
+  <div class="card" style="max-width:700px;">
+    <button class="back-btn" onclick="navigate(2,6)">← Back</button>
+ 
+    <div class="cc-header">
+      <div class="cc-title">Chemical Calculator</div>
+      <div class="cc-subtitle">Pond Treatment Dosage Calculator</div>
+    </div>
+ 
+    <!-- Step 01 — Chemical -->
+    <div class="setup-block">
+      <p class="section-label">01 — Select Chemical</p>
+      <div class="chem-toggle">
+        <button class="chem-btn active" id="cc_btn_chlorine" onclick="selectChemical('chlorine', this)">
+          <span class="chem-emoji">🧪</span>
+          <span class="chem-name">Chlorine</span>
+          <span class="chem-sub">Calcium Hypochlorite</span>
+        </button>
+        <button class="chem-btn" id="cc_btn_condys" onclick="selectChemical('condys', this)">
+          <span class="chem-emoji">🧪</span>
+          <span class="chem-name">Condy's</span>
+          <span class="chem-sub">Potassium Permanganate</span>
+        </button>
+      </div>
+    </div>
+ 
+    <!-- Step 02 — Inputs (Chlorine) -->
+    <div class="setup-block" id="cc_inputs_chlorine">
+      <p class="section-label">02 — Enter Values</p>
+      <div class="input-row" style="flex-direction:column; gap:16px; max-width:420px; margin:0 auto;">
+        <div class="input-group">
+          <label for="cc_c_volume">Pond Water Volume (m³)</label>
+          <input type="number" id="cc_c_volume" class="pl-input" placeholder="e.g. 5000" min="1" step="1" oninput="this.classList.remove('error')" />
+        </div>
+        <div class="input-group">
+          <label for="cc_c_dose">Target Dose (ppm)</label>
+          <input type="number" id="cc_c_dose" class="pl-input" placeholder="e.g. 30" min="0" step="0.1" onkeydown="if(event.key==='Enter') calculateChemical()" oninput="this.classList.remove('error')" />
+        </div>
+        <div class="input-group">
+          <div class="slider-block" style="margin-top:0; padding:16px 20px;">
+            <div class="slider-header">
+              <span class="slider-label">Chemical Concentration</span>
+              <span class="slider-value" id="cc_c_concDisplay">70%</span>
+            </div>
+            <input type="range" id="cc_c_conc" class="feed-slider" min="1" max="100" value="70" step="1" oninput="updateCCConcDisplay('chlorine', this.value)" />
+            <div class="slider-ticks">
+              <span class="slider-tick">1%</span>
+              <span class="slider-tick">25%</span>
+              <span class="slider-tick">50%</span>
+              <span class="slider-tick">75%</span>
+              <span class="slider-tick">100%</span>
+            </div>
+          </div>
+        </div>
+        <button class="gen-btn" style="width:100%;" onclick="calculateChemical()">Calculate →</button>
+      </div>
+    </div>
+ 
+    <!-- Step 02 — Inputs (Condy's) -->
+    <div class="setup-block" id="cc_inputs_condys" style="display:none;">
+      <p class="section-label">02 — Enter Values</p>
+      <div class="input-row" style="flex-direction:column; gap:16px; max-width:420px; margin:0 auto;">
+        <div class="input-group">
+          <label for="cc_p_volume">Pond Water Volume (m³)</label>
+          <input type="number" id="cc_p_volume" class="pl-input" placeholder="e.g. 5000" min="1" step="1" oninput="this.classList.remove('error')" />
+        </div>
+        <div class="input-group">
+          <label for="cc_p_dose">Target Dose (ppm)</label>
+          <input type="number" id="cc_p_dose" class="pl-input" placeholder="e.g. 4" min="0" step="0.1" onkeydown="if(event.key==='Enter') calculateChemical()" oninput="this.classList.remove('error')" />
+        </div>
+        <div class="input-group">
+          <div class="slider-block" style="margin-top:0; padding:16px 20px;">
+            <div class="slider-header">
+              <span class="slider-label">Chemical Concentration</span>
+              <span class="slider-value" id="cc_p_concDisplay">100%</span>
+            </div>
+            <input type="range" id="cc_p_conc" class="feed-slider" min="1" max="100" value="100" step="1" oninput="updateCCConcDisplay('condys', this.value)" />
+            <div class="slider-ticks">
+              <span class="slider-tick">1%</span>
+              <span class="slider-tick">25%</span>
+              <span class="slider-tick">50%</span>
+              <span class="slider-tick">75%</span>
+              <span class="slider-tick">100%</span>
+            </div>
+          </div>
+        </div>
+        <button class="gen-btn" style="width:100%;" onclick="calculateChemical()">Calculate →</button>
+      </div>
+    </div>
+ 
+    <!-- Results -->
+    <div class="cc-results" id="cc_results">
+      <div class="results-header">
+        <div>
+          <p class="results-label">Dosage Estimate</p>
+          <h2 class="results-title" id="cc_resultsTitle">—</h2>
+        </div>
+        <span class="results-meta" id="cc_resultsMeta">—</span>
+      </div>
+      <div class="sc-stats-row" style="grid-template-columns:repeat(2,1fr);">
+        <div class="sc-stat-card highlight">
+          <span class="sc-stat-value" id="cc_totalAmount">—</span>
+          <span class="sc-stat-label">Total Required (kg)</span>
+        </div>
+        <div class="sc-stat-card" style="border-color:rgba(45,156,219,0.4);">
+          <span class="sc-stat-value" id="cc_perUnit" style="color:var(--accent2);">—</span>
+          <span class="sc-stat-label">Per 1000 m³ (kg)</span>
+        </div>
+      </div>
+    </div>
+ 
+  </div>
+</div>
+ 
 <script>
   /* ════════════════════════════
      FEED DATA (per 100,000 PL)
@@ -1093,6 +1239,22 @@
         if (dfBtnMonodon) selectDFSpecies('monodon', dfBtnMonodon);
       } catch(e) { console.error('DF reset error:', e); }
       navigate(5, 2);
+    } else if (tool === 'chemical-calculator') {
+      try {
+        var ccRes = document.getElementById('cc_results');
+        if (ccRes) { ccRes.classList.remove('visible'); ccRes.style.display = 'none'; }
+        ['cc_c_volume','cc_c_dose','cc_p_volume','cc_p_dose'].forEach(function(id) {
+          var el = document.getElementById(id);
+          if (el) { el.value = ''; el.classList.remove('error'); }
+        });
+        var ccCConc = document.getElementById('cc_c_conc');
+        if (ccCConc) { ccCConc.value = 70; updateCCConcDisplay('chlorine', 70); }
+        var ccPConc = document.getElementById('cc_p_conc');
+        if (ccPConc) { ccPConc.value = 100; updateCCConcDisplay('condys', 100); }
+        var ccBtnChlorine = document.getElementById('cc_btn_chlorine');
+        if (ccBtnChlorine) selectChemical('chlorine', ccBtnChlorine);
+      } catch(e) { console.error('CC reset error:', e); }
+      navigate(6, 2);
     }
   }
  
@@ -1487,7 +1649,120 @@
   document.addEventListener('DOMContentLoaded', function() {
     updateDFSurvivalDisplay(80);
   });
+ 
+  /* ════════════════════════════
+     CHEMICAL CALCULATOR (UI only — no calculation logic yet)
+  ════════════════════════════ */
+  var selectedChemical = 'chlorine';
+ 
+  function selectChemical(chem, btn) {
+    selectedChemical = chem;
+    var screen6 = document.getElementById('screen6');
+    screen6.querySelectorAll('.chem-btn').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+ 
+    var chlorinePanel = document.getElementById('cc_inputs_chlorine');
+    var condysPanel    = document.getElementById('cc_inputs_condys');
+    if (chem === 'condys') {
+      chlorinePanel.style.display = 'none';
+      condysPanel.style.display = 'block';
+    } else {
+      chlorinePanel.style.display = 'block';
+      condysPanel.style.display = 'none';
+    }
+ 
+    // Clear inputs
+    ['cc_c_volume','cc_c_dose','cc_p_volume','cc_p_dose'].forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) { el.value = ''; el.classList.remove('error'); }
+    });
+ 
+    // Hide results
+    var ccRes = document.getElementById('cc_results');
+    ccRes.classList.remove('visible');
+    ccRes.style.display = 'none';
+  }
+ 
+  function calculateChemical() {
+    var ccRes = document.getElementById('cc_results');
+
+    if (selectedChemical === 'condys') {
+      var volume = parseFloat(document.getElementById('cc_p_volume').value);
+      var dose   = parseFloat(document.getElementById('cc_p_dose').value);
+      var conc   = parseFloat(document.getElementById('cc_p_conc').value);
+
+      var valid = true;
+      if (isNaN(volume) || volume < 1) {
+        document.getElementById('cc_p_volume').classList.add('error'); valid = false;
+      }
+      if (isNaN(dose) || dose <= 0) {
+        document.getElementById('cc_p_dose').classList.add('error'); valid = false;
+      }
+      if (!valid) return;
+
+      // ppm * volume(m3) = grams of active ingredient needed (since 1 m3 = 1000 L, 1 ppm = 1 mg/L)
+      var gramsActive = dose * volume;
+      var kgProduct    = (gramsActive / (conc / 100)) / 1000;
+      var perThousand  = (kgProduct / volume) * 1000;
+
+      document.getElementById('cc_resultsTitle').textContent = "Condy's (Potassium Permanganate)";
+      document.getElementById('cc_resultsMeta').textContent  = dose + ' ppm @ ' + conc + '%';
+      document.getElementById('cc_totalAmount').textContent  = kgProduct.toFixed(3);
+      document.getElementById('cc_perUnit').textContent      = perThousand.toFixed(3);
+
+    } else {
+      var volume2 = parseFloat(document.getElementById('cc_c_volume').value);
+      var dose2   = parseFloat(document.getElementById('cc_c_dose').value);
+      var conc2   = parseFloat(document.getElementById('cc_c_conc').value);
+
+      var valid2 = true;
+      if (isNaN(volume2) || volume2 < 1) {
+        document.getElementById('cc_c_volume').classList.add('error'); valid2 = false;
+      }
+      if (isNaN(dose2) || dose2 <= 0) {
+        document.getElementById('cc_c_dose').classList.add('error'); valid2 = false;
+      }
+      if (!valid2) return;
+
+      var gramsActive2 = dose2 * volume2;
+      var kgProduct2    = (gramsActive2 / (conc2 / 100)) / 1000;
+      var perThousand2  = (kgProduct2 / volume2) * 1000;
+
+      document.getElementById('cc_resultsTitle').textContent = 'Chlorine (Calcium Hypochlorite)';
+      document.getElementById('cc_resultsMeta').textContent  = dose2 + ' ppm @ ' + conc2 + '%';
+      document.getElementById('cc_totalAmount').textContent  = kgProduct2.toFixed(3);
+      document.getElementById('cc_perUnit').textContent      = perThousand2.toFixed(3);
+    }
+
+    ccRes.style.display = 'block';
+    requestAnimationFrame(function() {
+      requestAnimationFrame(function() {
+        ccRes.classList.add('visible');
+        ccRes.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      });
+    });
+  }
+
+  function updateCCConcDisplay(chem, val) {
+    var pct = parseInt(val);
+    if (chem === 'condys') {
+      document.getElementById('cc_p_concDisplay').textContent = pct + '%';
+      var pSlider = document.getElementById('cc_p_conc');
+      var pFill = ((pct - 1) / 99) * 100;
+      pSlider.style.background = 'linear-gradient(to right, var(--accent2) ' + pFill + '%, rgba(30,74,122,0.6) ' + pFill + '%)';
+    } else {
+      document.getElementById('cc_c_concDisplay').textContent = pct + '%';
+      var cSlider = document.getElementById('cc_c_conc');
+      var cFill = ((pct - 1) / 99) * 100;
+      cSlider.style.background = 'linear-gradient(to right, var(--accent2) ' + cFill + '%, rgba(30,74,122,0.6) ' + cFill + '%)';
+    }
+  }
+
+  // Init chemical concentration slider tracks on load
+  document.addEventListener('DOMContentLoaded', function() {
+    updateCCConcDisplay('chlorine', 70);
+    updateCCConcDisplay('condys', 100);
+  });
 </script>
 </body>
 </html>
- 
